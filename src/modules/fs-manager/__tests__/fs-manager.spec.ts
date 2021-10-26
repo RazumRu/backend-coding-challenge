@@ -249,6 +249,24 @@ describe('fs-manager', () => {
       )
     })
 
+    it(`should delete dir after move`, async () => {
+      const instance = getFsManagerInstance()
+
+      await instance.createDir('a')
+      await instance.createDir('b')
+      await instance.moveDir('a', 'b')
+      await instance.deleteDir('b/a')
+
+      // check old dir
+      await expect(instance.getDir('b/a')).rejects.toThrowWithMessage(
+        Error,
+        /does not exist/
+      )
+
+      const dir = await instance.getDir('b')
+      expect(dir).toBeTruthy()
+    })
+
     it(`should delete dir and subdirs`, async () => {
       const instance = getFsManagerInstance()
 
