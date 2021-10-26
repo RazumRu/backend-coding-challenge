@@ -126,6 +126,7 @@ describe('fs-manager', () => {
 
         expect(dir.name).toEqual('a')
         expect(dir.path).toEqual('b/a')
+        expect(dir.parent?.path).toEqual('b')
       }
 
       // check b dir
@@ -135,6 +136,36 @@ describe('fs-manager', () => {
         expect(dir.name).toEqual('b')
         expect(dir.path).toEqual('b')
         expect(dir.subdirs.size).toEqual(1)
+      }
+    })
+
+    it(`should move dir several times`, async () => {
+      const instance = getFsManagerInstance()
+
+      await instance.createDir('a')
+      await instance.createDir('b')
+      await instance.createDir('c')
+      await instance.moveDir('a', 'b')
+      await instance.moveDir('b/a', 'c')
+
+      // check old dir
+      await expect(instance.getDir('a')).rejects.toThrowWithMessage(
+        Error,
+        /does not exist/
+      )
+
+      await expect(instance.getDir('b/a')).rejects.toThrowWithMessage(
+        Error,
+        /does not exist/
+      )
+
+      // check moved dir
+      {
+        const dir = await instance.getDir('c/a')
+
+        expect(dir.name).toEqual('a')
+        expect(dir.path).toEqual('c/a')
+        expect(dir.parent?.path).toEqual('c')
       }
     })
 
@@ -162,6 +193,7 @@ describe('fs-manager', () => {
 
         expect(dir.name).toEqual('c')
         expect(dir.path).toEqual('b/a/c')
+        expect(dir.parent?.path).toEqual('b/a')
       }
 
       // check b dir
@@ -180,6 +212,7 @@ describe('fs-manager', () => {
         expect(dir.name).toEqual('a')
         expect(dir.path).toEqual('b/a')
         expect(dir.subdirs.size).toEqual(1)
+        expect(dir.parent?.path).toEqual('b')
       }
     })
 

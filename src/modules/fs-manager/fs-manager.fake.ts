@@ -117,6 +117,7 @@ export class FsManagerFake implements IFsManager {
 
       await this.deleteDir(initialDir.path)
       targetDir.subdirs.set(initialDir.name.toLowerCase(), initialDir)
+      initialDir.parent = targetDir
 
       // replace paths
       this.syncPaths(targetDir)
