@@ -4,7 +4,7 @@ In this challenge, i'm implement commands that allow a user to create, move and 
 
 ### Start
 
-Just run `yarn start` for running program.
+Just run `yarn install` and then `yarn start` for running program.
 The list of commands is taken from the `commands.txt` file. Also you can use another file (just pass the path to the file as the first argument `ts-node src/index filename`)
 
 ### Commands list
